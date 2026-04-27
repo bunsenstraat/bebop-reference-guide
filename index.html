@@ -10,6 +10,7 @@
   :root {
     --bg: #0e0c0a;
     --surface: #181410;
+    --surface-hover: #1c1710;
     --border: #2a2218;
     --accent: #c8963c;
     --accent2: #7ecbcf;
@@ -17,6 +18,31 @@
     --text: #e8dfc8;
     --muted: #7a6e5a;
     --tag-bg: #1f1a12;
+    --table-row-border: #161210;
+    --opt-selected-bg: #241c10;
+    --result-bg: #130f09;
+    --chip-bg: #1a1510;
+    --notice-bg: #1a1208;
+    --notice-border: #3a2a10;
+  }
+
+  body.light-theme {
+    --bg: #f6f1e8;
+    --surface: #fffaf0;
+    --surface-hover: #f5ebd8;
+    --border: #d7c9ae;
+    --accent: #a0661f;
+    --accent2: #1b6f73;
+    --accent3: #b34949;
+    --text: #2f2618;
+    --muted: #74634a;
+    --tag-bg: #f3e8d4;
+    --table-row-border: #e5d8c0;
+    --opt-selected-bg: #f1dfbf;
+    --result-bg: #f8edd7;
+    --chip-bg: #f1e4cf;
+    --notice-bg: #f5e5c9;
+    --notice-border: #d4b785;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,6 +63,13 @@
     padding-bottom: 20px;
     margin-bottom: 28px;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .brand {
+    display: flex;
     align-items: baseline;
     gap: 16px;
   }
@@ -54,6 +87,36 @@
     font-size: 11px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .theme-controls {
+    display: flex;
+    gap: 6px;
+  }
+
+  .theme-btn {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .theme-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .theme-btn.active {
+    background: var(--opt-selected-bg);
+    border-color: var(--accent);
+    color: var(--accent);
   }
 
   /* Tab bar */
@@ -120,7 +183,7 @@
 
   .rule:hover {
     border-color: var(--accent);
-    background: #1c1710;
+    background: var(--surface-hover);
   }
 
   .rule-num {
@@ -193,7 +256,7 @@
 
   .scale-table td {
     padding: 8px 12px;
-    border-bottom: 1px solid #161210;
+    border-bottom: 1px solid var(--table-row-border);
     vertical-align: top;
   }
 
@@ -249,12 +312,12 @@
   }
 
   .opt-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .opt-btn.selected { border-color: var(--accent); background: #241c10; color: var(--accent); }
+  .opt-btn.selected { border-color: var(--accent); background: var(--opt-selected-bg); color: var(--accent); }
 
   .result-box {
     margin-top: 16px;
     padding: 16px;
-    background: #130f09;
+    background: var(--result-bg);
     border: 1px solid var(--accent);
     border-radius: 4px;
     display: none;
@@ -281,7 +344,7 @@
   /* Quick ref chips for the situation panel */
   .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
   .chip {
-    background: #1a1510;
+    background: var(--chip-bg);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 3px 10px;
@@ -290,8 +353,8 @@
   }
 
   .notice {
-    background: #1a1208;
-    border: 1px solid #3a2a10;
+    background: var(--notice-bg);
+    border: 1px solid var(--notice-border);
     border-radius: 4px;
     padding: 10px 14px;
     font-size: 11px;
@@ -311,8 +374,14 @@
 <body>
 
 <header>
-  <h1>Bebop Reference</h1>
-  <span class="subtitle">Baker · How to Play Bebop Vol. 1</span>
+  <div class="brand">
+    <h1>Bebop Reference</h1>
+    <span class="subtitle">Baker · How to Play Bebop Vol. 1</span>
+  </div>
+  <div class="theme-controls">
+    <button id="dark-theme-btn" class="theme-btn" type="button" onclick="setTheme('dark')">Dark</button>
+    <button id="light-theme-btn" class="theme-btn" type="button" onclick="setTheme('light')">Light</button>
+  </div>
 </header>
 
 <div class="tabs">
@@ -640,6 +709,21 @@
 </div>
 
 <script>
+function updateThemeButtons(theme) {
+  document.getElementById('dark-theme-btn').classList.toggle('active', theme === 'dark');
+  document.getElementById('light-theme-btn').classList.toggle('active', theme === 'light');
+}
+
+function setTheme(theme) {
+  const isLight = theme === 'light';
+  document.body.classList.toggle('light-theme', isLight);
+  localStorage.setItem('bebop-theme', isLight ? 'light' : 'dark');
+  updateThemeButtons(isLight ? 'light' : 'dark');
+}
+
+const savedTheme = localStorage.getItem('bebop-theme');
+setTheme(savedTheme === 'light' ? 'light' : 'dark');
+
 function switchTab(id, el) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
