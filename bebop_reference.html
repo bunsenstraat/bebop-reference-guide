@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bebop Reference Card</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
+  :root {
+    --bg: #0e0c0a;
+    --surface: #181410;
+    --border: #2a2218;
+    --accent: #c8963c;
+    --accent2: #7ecbcf;
+    --accent3: #d45f5f;
+    --text: #e8dfc8;
+    --muted: #7a6e5a;
+    --tag-bg: #1f1a12;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 32px 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Tab bar */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tab {
+    padding: 8px 16px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: inherit;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Section headers */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--accent);
+    margin-bottom: 14px;
+    margin-top: 28px;
+    padding-left: 10px;
+    border-left: 2px solid var(--accent);
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  /* Rule cards */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .rule {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+    position: relative;
+  }
+
+  .rule:hover {
+    border-color: var(--accent);
+    background: #1c1710;
+  }
+
+  .rule-num {
+    color: var(--muted);
+    font-size: 10px;
+    position: absolute;
+    top: 10px;
+    right: 12px;
+  }
+
+  .rule-title {
+    color: var(--accent2);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  .rule-body {
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .rule-body em {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  /* Tag pills */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .tag {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 2px 7px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .tag.dom { border-color: #3a4a2a; color: #7aaa50; }
+  .tag.maj { border-color: #2a3a4a; color: #5a9acd; }
+  .tag.ext { border-color: #4a2a2a; color: #cd5a5a; }
+
+  /* Scale table */
+  .scale-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .scale-table th {
+    text-align: left;
+    padding: 8px 12px;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+  }
+
+  .scale-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #161210;
+    vertical-align: top;
+  }
+
+  .scale-table tr:hover td { background: var(--surface); }
+
+  .chord-symbol {
+    color: var(--accent);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .scale-name { color: var(--accent2); }
+
+  .scale-formula {
+    color: var(--muted);
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Situation chooser */
+  .situation-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+
+  .situation-q {
+    color: var(--muted);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+
+  .situation-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .opt-btn {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 5px 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.12s;
+  }
+
+  .opt-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .opt-btn.selected { border-color: var(--accent); background: #241c10; color: var(--accent); }
+
+  .result-box {
+    margin-top: 16px;
+    padding: 16px;
+    background: #130f09;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    display: none;
+  }
+
+  .result-box.visible { display: block; }
+
+  .result-heading {
+    color: var(--accent);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .result-item {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .result-item:last-child { border-bottom: none; }
+  .result-item strong { color: var(--accent2); }
+
+  /* Quick ref chips for the situation panel */
+  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .chip {
+    background: #1a1510;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--text);
+  }
+
+  .notice {
+    background: #1a1208;
+    border: 1px solid #3a2a10;
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  .notice em { color: var(--accent); font-style: normal; }
+
+  /* Full width rule */
+  .rule.full { grid-column: 1 / -1; }
+
+  /* Separator */
+  hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Bebop Reference</h1>
+  <span class="subtitle">Baker · How to Play Bebop Vol. 1</span>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('rules', this)">Core Rules</button>
+  <button class="tab" onclick="switchTab('nonchord', this)">Non-Chord Tones</button>
+  <button class="tab" onclick="switchTab('extend', this)">Extensions</button>
+  <button class="tab" onclick="switchTab('scales', this)">Scale Syllabus</button>
+  <button class="tab" onclick="switchTab('situational', this)">Situational</button>
+</div>
+
+<!-- PANEL: CORE RULES -->
+<div id="rules" class="panel active">
+
+  <div class="section-title">Bebop Dominant Scale — C D E F G A B♭ B♮ C</div>
+  <div class="rules-grid">
+    <div class="rule">
+      <span class="rule-num">1</span>
+      <div class="rule-title">Which chord?</div>
+      <div class="rule-body">On a <em>dominant 7th</em>: reckon from the root (C7 → C bebop dom). On a <em>minor 7th</em>: reckon from its related dominant root (G- → use C bebop dom).</div>
+      <div class="tags"><span class="tag dom">dominant</span><span class="tag dom">minor ii</span></div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">2</span>
+      <div class="rule-title">Rhythmic placement</div>
+      <div class="rule-body">In pure form: starts on a <em>downbeat</em>, starts on a <em>chord tone</em> (1, 3, 5, b7). This keeps all chord tones falling on beats.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">3</span>
+      <div class="rule-title">Direction</div>
+      <div class="rule-body">The <em>descending</em> form is most common. Practice both. Line may ascend or descend in scalar fashion and return the same way.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">4</span>
+      <div class="rule-title">The extra half step</div>
+      <div class="rule-body">The chromatic pass sits between b7 and the octave. <em>If continuing:</em> keep the half step. <em>If ending a phrase:</em> omit it (use whole step instead).</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">5</span>
+      <div class="rule-title">Starting on the 3rd</div>
+      <div class="rule-body">From the 3rd, you may <em>descend chromatically to the 6th</em>, or ascend then descend chromatically from the 3rd.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">6</span>
+      <div class="rule-title">Phrase endings</div>
+      <div class="rule-body">Most phrases end on the <em>upbeat of beats 1 or 3</em>. Two common ending shapes: resolve down by half step, or resolve via b7 chromatic.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Bebop Major Scale — C D E F G G♯ A B C</div>
+  <div class="rules-grid">
+    <div class="rule">
+      <span class="rule-num">1</span>
+      <div class="rule-title">Formula</div>
+      <div class="rule-body">Spelled <em>1-2-3-4-5-#5-6-7-8</em>. Used over any <em>major type chord</em>. Chord tones for this scale are 1, 3, 5, and 6 (not 7).</div>
+      <div class="tags"><span class="tag maj">major</span></div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">2</span>
+      <div class="rule-title">Starting on the 9th</div>
+      <div class="rule-body">Descend chromatically from the 9th <em>to the major 7th</em>, then observe the basic rule from there.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">3</span>
+      <div class="rule-title">Starting on the maj 7th</div>
+      <div class="rule-body">Descend chromatically from the major 7th <em>to the 5th</em> of the chord.</div>
+    </div>
+    <div class="rule full">
+      <div class="rule-title">Same variety tricks apply</div>
+      <div class="rule-body">Start off beat 1 · vary the starting note · balance ascending/descending · bury the scale in a line · use turns on any chord tone · enclosure works on 1, 3, 5, 6.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Half-Diminished (ø) Chord</div>
+  <div class="rules-grid">
+    <div class="rule">
+      <span class="rule-num">A</span>
+      <div class="rule-title">As ii (minor 7th function)</div>
+      <div class="rule-body">Treat the ø chord as a <em>minor ii</em> and apply all dominant bebop rules. E.g. Gø → C7: use C dominant bebop over both.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">B</span>
+      <div class="rule-title">As VII in ii–V–I chain</div>
+      <div class="rule-body">In a G- C7 Eø A7 D- sequence: treat the <em>ø as the ii of its related V</em>. Eø is ii of A7 → use A dominant bebop over Eø.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL: NON-CHORD TONES -->
+<div id="nonchord" class="panel">
+  <div class="notice">When you start on a non-chord tone (or a chord tone falls on an upbeat), you need one of these moves to get a chord tone back on a downbeat <em>as soon as possible</em>.</div>
+
+  <div class="section-title">Options when starting on a non-chord tone</div>
+  <div class="rules-grid">
+    <div class="rule">
+      <span class="rule-num">1</span>
+      <div class="rule-title">Omit the extra half step</div>
+      <div class="rule-body">Use the scale without the chromatic passing tone. Proceed until a chord tone lands on a downbeat naturally.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">2</span>
+      <div class="rule-title">Omit until b7, then restore</div>
+      <div class="rule-body">Skip the half step <em>until you reach the b7</em>. Once there, the normal half-step rule resumes.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">3</span>
+      <div class="rule-title">Quarter-note the non-chord tone</div>
+      <div class="rule-body">Make the non-chord tone a <em>quarter note</em> so the following chord tone falls correctly on the next downbeat.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">4</span>
+      <div class="rule-title">Insert chromatic approach</div>
+      <div class="rule-body">Insert a <em>half step before the first chord tone</em> you reach to restore metric balance.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">5</span>
+      <div class="rule-title">Syncopate the chord tone</div>
+      <div class="rule-body"><em>Tie the chord tone</em> across the barline / into the downbeat (anticipation / syncopation). Classic bebop rhythmic feel.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">6</span>
+      <div class="rule-title">From b2: approach tonic below</div>
+      <div class="rule-body">From the b2, approach the tonic <em>from a half step below</em> (i.e. via the leading tone).</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">7</span>
+      <div class="rule-title">From b3: approach 3rd above</div>
+      <div class="rule-body">From the b3, approach the 3rd <em>from a half step above</em>.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">8</span>
+      <div class="rule-title">From #4: descend to 3rd</div>
+      <div class="rule-body">From the #4, <em>descend chromatically to the 3rd</em>.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">9</span>
+      <div class="rule-title">From b6: approach 5th or b7</div>
+      <div class="rule-body">From the b6, approach the 5th <em>from a half step below</em>, or ascend chromatically to the b7.</div>
+    </div>
+    <div class="rule full">
+      <span class="rule-num">11</span>
+      <div class="rule-title">The master rule</div>
+      <div class="rule-body">Move by <em>step, half step, or skip</em> until a chord tone occurs on a downbeat. All preceding options are implementations of this rule.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Triplets</div>
+  <div class="rules-grid">
+    <div class="rule">
+      <div class="rule-title">Normal flow</div>
+      <div class="rule-body">Make the <em>middle note of the triplet</em> the chord tone (exception: going to the tonic — start on the maj 7th).</div>
+    </div>
+    <div class="rule">
+      <div class="rule-title">Starting triplet on chord tone</div>
+      <div class="rule-body">Use any non-chord-tone rule: <em>enclosure, quarter note, syncopation, or omit the half step</em>.</div>
+    </div>
+    <div class="rule">
+      <div class="rule-title">String of triplets</div>
+      <div class="rule-body">The <em>last triplet</em> in the string determines which rule applies. Work backwards.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL: EXTENSIONS -->
+<div id="extend" class="panel">
+  <div class="section-title">Ways to extend / vary the bebop line</div>
+
+  <div class="rules-grid">
+    <div class="rule">
+      <span class="rule-num">1</span>
+      <div class="rule-title">Maj7 chord ascent at b7</div>
+      <div class="rule-body">Upon arrival on the <em>b7</em>, ascend along a major seventh chord (e.g. Bb△9) to extend or change direction.</div>
+      <div class="tags"><span class="tag ext">extension</span></div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">2</span>
+      <div class="rule-title">Diminished outline at 3/5/b7</div>
+      <div class="rule-body">Upon arrival on the <em>3rd, 5th, or b7th</em>, proceed along the diminished chord containing that note. Usually sets up a modulation.</div>
+      <div class="tags"><span class="tag ext">extension</span></div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">3</span>
+      <div class="rule-title">Deflection at the 5th</div>
+      <div class="rule-body">When leaving the 5th, <em>deflect</em> (briefly leave scale direction) then resume descent with the 5th on a downbeat. Great for modal situations.</div>
+      <div class="tags"><span class="tag ext">extension</span></div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">4</span>
+      <div class="rule-title">Enclosure</div>
+      <div class="rule-body">Delay arrival of the root or 5th by inserting the note <em>one half step above and one half step below</em> it first (bracket the target). Works from 3rd or b7 origins too.</div>
+      <div class="tags"><span class="tag ext">technique</span></div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">5</span>
+      <div class="rule-title">Join to other bebop scales</div>
+      <div class="rule-body">End one scale and flow directly into the next chord's bebop scale via <em>conjunct motion</em> (half or whole step). Keep the line continuous.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">6</span>
+      <div class="rule-title">Join to other scale types</div>
+      <div class="rule-body">Transition from the bebop line into <em>diminished, whole-tone, or diminished/whole-tone</em> for color and contrast.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">7</span>
+      <div class="rule-title">Delays / rhythmic displacement</div>
+      <div class="rule-body">Use dotted rhythms or rests to <em>delay the start</em> of the scale, then proceed normally. Adds rhythmic surprise.</div>
+    </div>
+    <div class="rule">
+      <span class="rule-num">8</span>
+      <div class="rule-title">Double time</div>
+      <div class="rule-body">Double the rate of notes within the same harmonic space. Use extension techniques to fill the extra space.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Variety within a single chord</div>
+  <div class="rules-grid">
+    <div class="rule">
+      <div class="rule-title">Start off beat 1</div>
+      <div class="rule-body">Begin the scale on beat 2, 3, an upbeat, etc. The downbeat rule shifts accordingly.</div>
+    </div>
+    <div class="rule">
+      <div class="rule-title">Vary the starting pitch</div>
+      <div class="rule-body">Not just root and chord tones — any note. Non-chord-tone starts use the appropriate rules.</div>
+    </div>
+    <div class="rule">
+      <div class="rule-title">Balance direction</div>
+      <div class="rule-body">Alternate ascending and descending passages. Avoid monotone scalar direction.</div>
+    </div>
+    <div class="rule">
+      <div class="rule-title">Bury the scale</div>
+      <div class="rule-body">Hide the scalar motion inside leaps and other gestures so it isn't obvious as a straight scale.</div>
+    </div>
+    <div class="rule">
+      <div class="rule-title">Turns</div>
+      <div class="rule-body">Use ornamental turns on any chord tone.</div>
+    </div>
+    <div class="rule">
+      <div class="rule-title">Spins</div>
+      <div class="rule-body">Scalar ascending figures (3–6 notes) that restart from the next chord tone. Chain them for continuous motion.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL: SCALE SYLLABUS -->
+<div id="scales" class="panel">
+  <div class="notice">Scale choices based on Baker's analysis of performance practice of bebop/post-bebop masters. <em>Multiple options</em> = player's discretion based on context and ear.</div>
+
+  <div class="section-title">Major Family</div>
+  <table class="scale-table">
+    <tr><th>Chord type</th><th>Scale(s)</th><th>Formula</th></tr>
+    <tr><td class="chord-symbol">Major △</td><td class="scale-name">Major</td><td class="scale-formula">1 2 3 4 5 6 7 8</td></tr>
+    <tr><td class="chord-symbol">Major (#11)</td><td class="scale-name">Lydian</td><td class="scale-formula">1 2 3 #4 5 6 7 8</td></tr>
+    <tr><td class="chord-symbol">Major (#11 #5)</td><td class="scale-name">Lydian Augmented</td><td class="scale-formula">1 2 3 #4 #5 6 7 8</td></tr>
+    <tr><td class="chord-symbol">Major (b6 b9)</td><td class="scale-name">Augmented</td><td class="scale-formula">1 #2 3 5 b6 7 1</td></tr>
+    <tr><td class="chord-symbol">Major</td><td class="scale-name">Blues</td><td class="scale-formula">1 b3 b3 3 4 #4 5 b7 8</td></tr>
+    <tr><td class="chord-symbol">Major</td><td class="scale-name">Minor Pentatonic</td><td class="scale-formula">1 b3 4 5 b7 8</td></tr>
+    <tr><td class="chord-symbol">Major</td><td class="scale-name">Major Pentatonic</td><td class="scale-formula">1 2 3 5 6 8</td></tr>
+  </table>
+
+  <div class="section-title">Minor Family</div>
+  <table class="scale-table">
+    <tr><th>Chord type</th><th>Scale(s)</th><th>Formula</th></tr>
+    <tr><td class="chord-symbol">Minor tonic (i)</td><td class="scale-name">Dorian</td><td class="scale-formula">1 2 b3 4 5 6 b7 8</td></tr>
+    <tr><td class="chord-symbol">Minor tonic (i)</td><td class="scale-name">Natural minor</td><td class="scale-formula">1 2 b3 4 5 b6 b7 8</td></tr>
+    <tr><td class="chord-symbol">Minor tonic (i)</td><td class="scale-name">Phrygian</td><td class="scale-formula">1 b2 b3 4 5 b6 b7 8</td></tr>
+    <tr><td class="chord-symbol">Minor tonic (i)</td><td class="scale-name">Asc. Melodic minor</td><td class="scale-formula">1 2 b3 4 5 6 7 8</td></tr>
+    <tr><td class="chord-symbol">Minor tonic (i)</td><td class="scale-name">Harmonic minor</td><td class="scale-formula">1 2 b3 4 5 b6 7 8</td></tr>
+    <tr><td class="chord-symbol">Minor 7th (ii)</td><td class="scale-name">Dorian</td><td class="scale-formula">1 2 b3 4 5 6 b7 9</td></tr>
+    <tr><td class="chord-symbol">Minor 7th (ii)</td><td class="scale-name">Diminished (W-H)</td><td class="scale-formula">1 2 b3 4 #4 #5 6 7 8</td></tr>
+  </table>
+
+  <div class="section-title">Dominant Family</div>
+  <table class="scale-table">
+    <tr><th>Chord type</th><th>Scale(s)</th><th>Formula</th></tr>
+    <tr><td class="chord-symbol">Dom 7 (unalt.)</td><td class="scale-name">Mixolydian</td><td class="scale-formula">1 2 3 4 5 6 b7 8</td></tr>
+    <tr><td class="chord-symbol">Dom 7 (unalt.)</td><td class="scale-name">Lydian Dominant</td><td class="scale-formula">1 2 3 #4 5 6 b7 8</td></tr>
+    <tr><td class="chord-symbol">Dom 7 (#11)</td><td class="scale-name">Lydian Dominant</td><td class="scale-formula">1 2 3 #4 5 6 b7 8</td></tr>
+    <tr><td class="chord-symbol">Dom 7 (b5/#5)</td><td class="scale-name">Whole Tone</td><td class="scale-formula">1 2 3 #4 #5 #6</td></tr>
+    <tr><td class="chord-symbol">Dom 7 (b9)</td><td class="scale-name">Diminished (H-W)</td><td class="scale-formula">1 b2 b3 b3 #4 5 6 b7 8</td></tr>
+    <tr><td class="chord-symbol">Dom 7 (#9)</td><td class="scale-name">Dim. Whole-tone</td><td class="scale-formula">1 b2 b3 b3 #4 #5 #6 8</td></tr>
+    <tr><td class="chord-symbol">Dom 7 (#9)</td><td class="scale-name">Dorian</td><td class="scale-formula">1 2 b3 4 5 6 b7 8</td></tr>
+    <tr><td class="chord-symbol">Dom 7 (#9)</td><td class="scale-name">Blues</td><td class="scale-formula">1 b3 b3 3 4 #4 5 b7 8</td></tr>
+  </table>
+
+  <div class="section-title">Half-Diminished &amp; Diminished</div>
+  <table class="scale-table">
+    <tr><th>Chord type</th><th>Scale(s)</th><th>Formula</th></tr>
+    <tr><td class="chord-symbol">ø7 (half-dim)</td><td class="scale-name">Locrian</td><td class="scale-formula">1 b2 b3 4 b5 b6 b7 8</td></tr>
+    <tr><td class="chord-symbol">ø7 (half-dim)</td><td class="scale-name">Locrian #2</td><td class="scale-formula">1 2 b3 4 b5 b6 b7 8</td></tr>
+    <tr><td class="chord-symbol">ø7 (half-dim)</td><td class="scale-name">Diminished (W-H)</td><td class="scale-formula">1 2 b3 4 #4 #5 6 7 8</td></tr>
+    <tr><td class="chord-symbol">o7 (full dim)</td><td class="scale-name">Diminished (W-H)</td><td class="scale-formula">1 2 b3 4 #4 #5 6 7 8</td></tr>
+  </table>
+</div>
+
+<!-- PANEL: SITUATIONAL -->
+<div id="situational" class="panel">
+  <div class="situation-box">
+    <div class="situation-q">Where are you in the phrase?</div>
+    <div class="situation-options">
+      <button class="opt-btn" onclick="selectSituation('start')">Starting a line</button>
+      <button class="opt-btn" onclick="selectSituation('middle')">Midline, running out</button>
+      <button class="opt-btn" onclick="selectSituation('ending')">Ending a phrase</button>
+      <button class="opt-btn" onclick="selectSituation('nonchord')">Started on wrong beat</button>
+      <button class="opt-btn" onclick="selectSituation('modal')">Long vamp / modal</button>
+      <button class="opt-btn" onclick="selectSituation('change')">Chord is changing</button>
+    </div>
+  </div>
+
+  <div id="result" class="result-box">
+    <div class="result-heading" id="result-heading"></div>
+    <div id="result-content"></div>
+  </div>
+
+  <hr>
+
+  <div class="section-title">Tunes that suggest specific scales</div>
+  <table class="scale-table">
+    <tr><th>Tune / passage</th><th>Suggests</th></tr>
+    <tr><td>"Take the A Train" — D7#5</td><td class="scale-name">Whole tone scale</td></tr>
+    <tr><td>"Caravan" — C7b9 and Gø</td><td class="scale-name">Diminished scale</td></tr>
+    <tr><td>"Nica's Dream" — maj chords</td><td class="scale-name">Ascending melodic minor</td></tr>
+    <tr><td>"Dewey Square" — F7#11</td><td class="scale-name">Lydian dominant</td></tr>
+  </table>
+
+  <div class="notice">Best way to internalize scale/chord contexts: <em>transcribe recordings</em> by the bebop giants and locate the exact passage in a tune that forces that scale choice. Isolate → learn → personalize.</div>
+</div>
+
+<script>
+function switchTab(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+const situations = {
+  start: {
+    heading: "Starting a line",
+    items: [
+      { label: "Start on chord tone (1, 3, 5, b7)", detail: "Preferred. Scale flows naturally, chord tones land on downbeats." },
+      { label: "Start on downbeat", detail: "The pure bebop form. If off the downbeat, you now have a non-chord-tone situation." },
+      { label: "Use enclosure to approach root or 5th", detail: "Half step above + half step below before landing. Delays and dramatizes the arrival." },
+      { label: "Start on non-chord tone?", detail: "→ See the Non-Chord Tones tab for your options. Goal: get to a chord tone on a downbeat ASAP." }
+    ]
+  },
+  middle: {
+    heading: "Midline — extending or continuing",
+    items: [
+      { label: "At the b7: ascend the major 7th chord", detail: "E.g. on C7, arriving at Bb → ascend Bb△9 arpeggio for extension or direction change." },
+      { label: "At 3rd, 5th, or b7: outline diminished", detail: "Follow the diminished chord from that tone. Usually sets up modulation or chromatic motion." },
+      { label: "Deflect at the 5th", detail: "Leave the scale briefly at the 5th, then return with 5th on a downbeat. Great for variety." },
+      { label: "Join to next chord's bebop scale", detail: "Move by step (half or whole) into the new chord's scale. Keep the line continuous." },
+      { label: "Double time it", detail: "Double the note rate. Use extensions to fill the extra beats." }
+    ]
+  },
+  ending: {
+    heading: "Ending a phrase",
+    items: [
+      { label: "Land on upbeat of beat 1 or 3", detail: "Most common bebop phrase ending. Leaves space for the next phrase." },
+      { label: "Omit the extra half step at end", detail: "Use whole step between tonic and b7 at cadence (not the chromatic pass)." },
+      { label: "Ending shape 1: resolve down by half step", detail: "Arrive at a chord tone and step down a half step to close." },
+      { label: "Ending shape 2: b7 chromatic resolution", detail: "Approach via the chromatic b7 and close there." }
+    ]
+  },
+  nonchord: {
+    heading: "Non-chord tone on the downbeat — fix options",
+    items: [
+      { label: "Omit the extra half step", detail: "Proceed scale-wise without the chromatic pass until balance restores." },
+      { label: "Omit until b7 then restore", detail: "Skip the half step until you hit the b7, then resume normal rules." },
+      { label: "Quarter note the non-chord tone", detail: "Lengthen it so the next chord tone falls on the following downbeat." },
+      { label: "Insert chromatic approach before first chord tone", detail: "Half step below the first chord tone you reach restores the downbeat alignment." },
+      { label: "Syncopate / anticipate the chord tone", detail: "Tie the chord tone back into the downbeat. Classic bebop phrasing device." },
+      { label: "Move by step/half-step/skip toward chord tone", detail: "The master rule — any motion is acceptable as long as you reach a chord tone on a downbeat." }
+    ]
+  },
+  modal: {
+    heading: "Long vamp / modal situation",
+    items: [
+      { label: "Use deflection and enclosure liberally", detail: "These extension techniques are most useful here — you need to fill time without harmonic movement." },
+      { label: "Join bebop lines to diminished or whole-tone passages", detail: "Inject color scales to break monotony on long static chords." },
+      { label: "Use double time passages", detail: "Double-time a short phrase, then return to normal. Builds intensity and releases it." },
+      { label: "Bury the scale inside leaps and turns", detail: "Disguise the scalar motion so it doesn't sound like scale practice." },
+      { label: "Vary starting pitch each phrase", detail: "Start from a different chord tone or non-chord tone each time." }
+    ]
+  },
+  change: {
+    heading: "Chord is changing",
+    items: [
+      { label: "Arrive by conjunct motion (half or whole step)", detail: "The smoothest bebop transition: step into the new chord's root or first chord tone." },
+      { label: "Arrive on a chord tone of the new chord", detail: "Whatever the entry note, it should be a chord tone of the incoming chord on the downbeat." },
+      { label: "Use the diminished at 3/5/b7 to set up modulation", detail: "If the change is distant, outline the diminished chord — it has symmetry that connects many keys." },
+      { label: "ø chord: decide its function first", detail: "Is it acting as ii (→ use its related dominant's bebop scale) or as VII in a ii-V-I chain (→ use the ii of the following V)?" }
+    ]
+  }
+};
+
+function selectSituation(key) {
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  event.target.classList.add('selected');
+
+  const s = situations[key];
+  document.getElementById('result-heading').textContent = s.heading;
+  const content = s.items.map(item =>
+    `<div class="result-item"><strong>${item.label}</strong><br>${item.detail}</div>`
+  ).join('');
+  document.getElementById('result-content').innerHTML = content;
+  document.getElementById('result').classList.add('visible');
+}
+</script>
+</body>
+</html>
